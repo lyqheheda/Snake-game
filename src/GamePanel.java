@@ -97,7 +97,13 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
         if (code == KeyEvent.VK_SPACE) {
-            isStarted = !isStarted;
+            if(isFailed){
+                initSnake();
+            }
+            else{
+                isStarted=!isStarted;
+            }
+            
         } else if (code == KeyEvent.VK_UP && !direction.equals("D"))
             direction = "U";
         else if (code == KeyEvent.VK_DOWN && !direction.equals("U"))
@@ -115,9 +121,9 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-
-        if (isStarted) {
-            for (int i = len - 1; i > 0; i--) {
+         
+        if (isStarted&&!isFailed) {
+            for (int i = len-1 ; i > 0; i--) {
                 snakex[i] = snakex[i - 1];
                 snakey[i] = snakey[i - 1];
             }
@@ -140,6 +146,21 @@ public class GamePanel extends JPanel implements ActionListener, KeyListener {
                     snakey[0] = 75;
             }
 
+            if(foodX==snakex[0]&&foodY==snakey[0]){
+                len++;
+                 foodX = r.nextInt(34) * 25 + 25;
+                 foodY = r.nextInt(24) * 25 + 75;
+            }
+
+            for(int i=1;i<len;i++){
+                if(snakex[0]==snakex[i]&&snakey[0]==snakey[i]){
+
+                    isFailed=true;
+                    
+                }
+            }
+
+            
         }
 
         repaint();
